@@ -1,4 +1,4 @@
-import { BrowserRoute, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home"
 import Auth from "./pages/Auth"
 import DashBoard from "./pages/Dashboard"
@@ -8,7 +8,7 @@ import NotFound from "./pages/NotFound"
 
 function App() {
     return (
-        <BrowserRoute>
+        <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />} />
@@ -17,7 +17,7 @@ function App() {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
-        </BrowserRoute>
+        </BrowserRouter>
     )
 }
 
