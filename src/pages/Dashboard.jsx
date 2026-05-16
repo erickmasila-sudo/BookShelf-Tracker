@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/Authcontext"
-import { addBook, getBooks } from "../booktools"
+import { addBook, getBooks, updateBook, deleteBook } from "../booktools"
 import Shelf from "../components/Shelf"
+
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -34,7 +35,16 @@ const Dashboard = () => {
     setBooks([...books, { id: added.id, ...newBook }])
     setSearching(false); setQuery(""); setResults([])
   }
+  
+  const handleMove = async (book, newShelf) => {
+   await updateBook(book.id, { shelf: newShelf })
+   setBooks(books.map(b => b.id === book.id ? { ...b, shelf: newShelf } : b))
+}
 
+  const handleRemove = async (id) => {
+  await deleteBook(id)
+  setBooks(books.filter(b => b.id !== id))
+} 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
       <div className="max-w-5xl mx-auto">
@@ -66,7 +76,7 @@ const Dashboard = () => {
 
       <div className="space-y-10">
        {["Want to Read", "Reading", "Finished"].map(shelf => (
-      <Shelf key={shelf} title={shelf} books={books.filter(b => b.shelf === shelf)} />
+      <Shelf key={shelf} title={shelf} books={books.filter(b => b.shelf === shelf)} onMove={handleMove} onRemove={handleRemove} />
       ))}
       </div>
 
