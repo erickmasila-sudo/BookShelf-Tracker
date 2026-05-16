@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useAuth } from "../context/Authcontext"
 import { addBook, getBooks } from "../booktools"
+import Shelf from "../components/Shelf"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -16,6 +17,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user) getBooks(user.uid).then(setBooks)
+      console
   }, [user])
 
   const searchBooks = async () => {
@@ -62,9 +64,11 @@ const Dashboard = () => {
           </div>
         )}
 
-        <div className="text-gray-500 text-sm">
-          {books.length === 0 ? "No books yet. Add one!" : `${books.length} book(s) on your shelf`}
-        </div>
+      <div className="space-y-10">
+       {["Want to Read", "Reading", "Finished"].map(shelf => (
+      <Shelf key={shelf} title={shelf} books={books.filter(b => b.shelf === shelf)} />
+      ))}
+      </div>
 
       </div>
     </div>
