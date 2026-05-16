@@ -5,8 +5,8 @@ const Books = ({ book, onMove, onRemove }) => {
   return (
     <div className="bg-gray-900 rounded-lg overflow-hidden">
       {book.cover
-        ? <img src={book.cover} className="w-full h-36 object-cover" />
-        : <div className="w-full h-36 bg-gray-700 flex items-center justify-center text-xs text-gray-500">No Cover</div>
+        ? <img src={book.cover} className="w-full h-auto object-cover" />
+        : <div className="w-full h-auto bg-gray-700 flex items-center justify-center text-xs text-gray-500">No Cover</div>
       }
       <div className="p-2">
         <p className="text-xs truncate text-gray-100">{book.title}</p>
