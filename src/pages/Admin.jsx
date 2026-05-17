@@ -9,9 +9,11 @@ const Admin = () => {
 useEffect(() => {
   const fetch = async () => {
     const booksSnap = await getDocs(collection(db, "books"))
+    console.log("books:", booksSnap.docs.length) 
     const books = booksSnap.docs.map(d => d.data())
 
     const usersSnap = await getDocs(collection(db, "users"))
+    console.log("users:", usersSnap.docs.length)
     const userMap = {}
     usersSnap.docs.forEach(d => { userMap[d.id] = d.data().username })
 
