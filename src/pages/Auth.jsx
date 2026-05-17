@@ -1,6 +1,9 @@
 import React, { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../context/Authcontext"
+import { db } from "../firebase/config"
+import { doc, getDoc, setDoc } from "firebase/firestore"
+
 function Auth() {
   const inputClass = "w-full bg-gray-800 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 placeholder-gray-600"
   const Label = "block text-white text-xl mb-1"
@@ -10,15 +13,15 @@ function Auth() {
   const Btn = "w-full bg-amber-400 hover:bg-amber-300 text-gray-950 font-semibold py-3 rounded-lg text-sm text-center cursor-pointer mt-6"
   const Google = "mt-5 w-full flex items-center justify-center gap-3 bg-gray-800 border border-gray-700 text-gray-200 font-medium py-3 rounded-lg text-sm cursor-pointer hover:bg-gray-700"
 
- const [action, setAction] = useState("Sign Up")
- const { login, signup, googleLogin } = useAuth()
- const navigate = useNavigate()
- const [email, setEmail] = useState("")
- const [password, setPassword] = useState("")
- const [username, setUsername] = useState("")
- const [error, setError] = useState("")
- const [pendingUser, setPendingUser] = useState(null)
- const [googleUsername, setGoogleUsername] = useState("")
+  const [action, setAction] = useState("Sign Up")
+  const { login, signup, googleLogin } = useAuth()
+  const navigate = useNavigate()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [username, setUsername] = useState("")
+  const [error, setError] = useState("")
+  const [pendingUser, setPendingUser] = useState(null)
+  const [googleUsername, setGoogleUsername] = useState("")
 
   const saveUsername = async (uid, name) => {
     await setDoc(doc(db, "users", uid), { username: name })
@@ -27,13 +30,14 @@ function Auth() {
   const handleSubmit = async () => {
     setError("")
     try {
-        console.log("trying")
-      if (action === "Sign Up") await signup(email, password)
-      else await login(email, password)
-    console.log("success")
+      if (action === "Sign Up") {
+        const result = await signup(email, password)
+        await saveUsername(result.user.uid, username)
+      } else {
+        await login(email, password)
+      }
       navigate("/dashboard")
     } catch (err) {
-        console.log("error", err.message)
       setError(err.message)
     }
   }
@@ -41,16 +45,21 @@ function Auth() {
   const handleGoogle = async () => {
     setError("")
     try {
-      await googleLogin()
-      navigate("/dashboard")
+      const result = await googleLogin()
+      const userDoc = await getDoc(doc(db, "users", result.user.uid))
+      if (userDoc.exists()) {
+        navigate("/dashboard")
+      } else {
+        setPendingUser(result.user)
+      }
     } catch (err) {
       setError(err.message)
     }
   }
 
   const handleGoogleUsername = async () => {
-    if (!googleUsername.trim()) 
-    return await saveUsername(pendingUser.uid, googleUsername)
+    if (!googleUsername.trim()) return
+    await saveUsername(pendingUser.uid, googleUsername)
     navigate("/dashboard")
   }
 
@@ -86,7 +95,7 @@ function Auth() {
 
          <div>
             <label className={Label}>Password</label>
-            <input type="passWord" placeholder="Password" className={inputClass} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" placeholder="Password" className={inputClass} value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
 
          </div>

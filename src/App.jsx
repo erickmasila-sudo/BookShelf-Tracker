@@ -7,6 +7,7 @@ import Admin from "./pages/Admin"
 import NotFound from "./pages/NotFound"
 import { AuthProvider } from "./context/Authcontext";
 import ProtectedRoute from "./components/ProtectedRoute"
+import Navbar from "./components/Navbar";
 function App() {
     return (
       <AuthProvider>
@@ -14,9 +15,9 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/dashboard" element={<ProtectedRoute><DashBoard /></ProtectedRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute><Navbar /><DashBoard /></ProtectedRoute>} />
                 <Route path="/Shelf/:username" element={<PublicShelf />} />
-                <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+                <Route path="/admin" element={<ProtectedRoute><Navbar /><Admin /></ProtectedRoute>} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>

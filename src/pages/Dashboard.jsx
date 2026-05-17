@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
+  const [username, setUsername] = useState("")
 
   const Label = "block text-white text-xl mb-1"
   const inputClass = "flex-1 bg-gray-800 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-amber-400 placeholder-gray-600"
@@ -19,7 +20,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (user) getBooks(user.uid).then(setBooks)
-      console
+      if (user) {
+    getBooks(user.uid).then(setBooks)
+    getDoc(doc(db, "users", user.uid)).then(d => {
+      if (d.exists()) setUsername(d.data().username)
+    })
+  }
   }, [user])
 
   const searchBooks = async () => {
@@ -29,13 +35,14 @@ const Dashboard = () => {
     setResults(data.docs)
     setLoading(false)
   }
-
   const handleAdd = async (book) => {
+    const userDoc = await getDoc(doc(db, "users", user.uid))
+    const username = userDoc.exists() ? userDoc.data().username : user.email
     const newBook = { title: book.title, author: book.author_name?.[0] || "Unknown", cover: book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null, shelf: "Want to Read", progress: 0, totalPages: book.number_of_pages_median || 0, username }
     const added = await addBook(user.uid, newBook)
     setBooks([...books, { id: added.id, ...newBook }])
     setSearching(false); setQuery(""); setResults([])
-  }
+  } 
   
   const handleMove = async (book, newShelf) => {
    await updateBook(book.id, { shelf: newShelf })
@@ -50,7 +57,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-amber-400">My Shelf</h1>
+          <h1 className="text-2xl font-bold text-amber-400">{username}'s Shelf</h1>
           <button onClick={() => setSearching(!searching)} className={Btn}>+ Add Book</button>
         </div>
 
