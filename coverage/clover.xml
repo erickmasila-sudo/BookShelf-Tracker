@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1779018108307" clover="3.2.0">
+  <project timestamp="1779018108307" name="All files">
+    <metrics statements="12" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="6" coveredmethods="3" elements="22" coveredelements="15" complexity="0" loc="12" ncloc="12" packages="2" files="3" classes="3"/>
+    <package name="components">
+      <metrics statements="6" coveredstatements="4" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="1"/>
+      <file name="Books.jsx" path="/home/erick-masila/Desktop/Projects/Book-Shelf/src/components/Books.jsx">
+        <metrics statements="6" coveredstatements="4" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="5" count="4" type="stmt"/>
+        <line num="15" count="0" type="cond" truecount="2" falsecount="0"/>
+        <line num="16" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="pages">
+      <metrics statements="6" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="2"/>
+      <file name="Home.jsx" path="/home/erick-masila/Desktop/Projects/Book-Shelf/src/pages/Home.jsx">
+        <metrics statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="9" count="0" type="stmt"/>
+      </file>
+      <file name="NotFound.jsx" path="/home/erick-masila/Desktop/Projects/Book-Shelf/src/pages/NotFound.jsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
