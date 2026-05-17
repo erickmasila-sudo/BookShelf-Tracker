@@ -6,23 +6,30 @@ const Admin = () => {
   const [users, setUsers] = useState([])
   const [topBook, setTopBook] = useState(null)
 
-  useEffect(() => {
-    const fetch = async () => {
-      const booksSnap = await getDocs(collection(db, "books"))
-      const books = booksSnap.docs.map(d => d.data())
+useEffect(() => {
+  const fetch = async () => {
+    const booksSnap = await getDocs(collection(db, "books"))
+    const books = booksSnap.docs.map(d => d.data())
 
-      const userCount = {}
-      books.forEach(b => { if (b.username) userCount[b.username] = (userCount[b.username] || 0) + 1 })
-      const sorted = Object.entries(userCount).sort((a, b) => b[1] - a[1])
-      setUsers(sorted)
+    const usersSnap = await getDocs(collection(db, "users"))
+    const userMap = {}
+    usersSnap.docs.forEach(d => { userMap[d.id] = d.data().username })
 
-      const count = {}
-      books.forEach(b => { count[b.title] = (count[b.title] || 0) + 1 })
-      const top = Object.entries(count).sort((a, b) => b[1] - a[1])[0]
-      if (top) setTopBook({ title: top[0], count: top[1] })
-    }
-    fetch()
-  }, [])
+    const userCount = {}
+    books.forEach(b => {
+      const name = userMap[b.userId] || b.username || "Unknown"
+      userCount[name] = (userCount[name] || 0) + 1
+    })
+    const sorted = Object.entries(userCount).sort((a, b) => b[1] - a[1])
+    setUsers(sorted)
+
+    const count = {}
+    books.forEach(b => { count[b.title] = (count[b.title] || 0) + 1 })
+    const top = Object.entries(count).sort((a, b) => b[1] - a[1])[0]
+    if (top) setTopBook({ title: top[0], count: top[1] })
+  }
+  fetch()
+}, [])
 
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-6">

@@ -2,7 +2,8 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../context/Authcontext"
 import { addBook, getBooks, updateBook, deleteBook } from "../booktools"
 import Shelf from "../components/Shelf"
-
+import {doc, getDoc} from "firebase/firestore"
+import { db } from "../firebase/config"
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -30,7 +31,7 @@ const Dashboard = () => {
   }
 
   const handleAdd = async (book) => {
-    const newBook = { title: book.title, author: book.author_name?.[0] || "Unknown", cover: book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null, shelf: "Want to Read", progress: 0, totalPages: book.number_of_pages_median || 0 }
+    const newBook = { title: book.title, author: book.author_name?.[0] || "Unknown", cover: book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : null, shelf: "Want to Read", progress: 0, totalPages: book.number_of_pages_median || 0, username }
     const added = await addBook(user.uid, newBook)
     setBooks([...books, { id: added.id, ...newBook }])
     setSearching(false); setQuery(""); setResults([])
